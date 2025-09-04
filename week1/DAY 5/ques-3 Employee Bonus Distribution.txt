@@ -1,0 +1,73 @@
+ques-3 Employee Bonus Distribution Engine
+
+import java.util.*;
+import java.util.stream.*;
+
+class Employee {
+    private final String name;
+    private final String department;
+    private final int rating;
+    private final double baseSalary;
+
+    public Employee(String name, String department, int rating, double baseSalary) {
+        this.name = name;
+        this.department = department;
+        this.rating = rating;
+        this.baseSalary = baseSalary;
+    }
+
+    public String getName() { return name; }
+    public String getDepartment() { return department; }
+    public int getRating() { return rating; }
+    public double getBaseSalary() { return baseSalary; }
+}
+
+class BonusDistribution {
+    private final Employee employee;
+    private final double bonus;
+
+    public BonusDistribution(Employee employee, double bonus) {
+        this.employee = employee;
+        this.bonus = bonus;
+    }
+
+    public Employee getEmployee() { return employee; }
+    public double getBonus() { return bonus; }
+}
+
+public class BonusCalculator {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+                new Employee("Alice", "IT", 5, 100000),
+                new Employee("Bob", "IT", 3, 80000),
+                new Employee("Charlie", "IT", 2, 60000),
+                new Employee("David", "Finance", 4, 90000),
+                new Employee("Eva", "Finance", 5, 120000),
+                new Employee("Frank", "Sales", 3, 70000)
+        );
+
+        Map<String, List<BonusDistribution>> bonusReport = employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.collectingAndThen(Collectors.toList(), BonusCalculator::distributeBonuses)));
+
+        System.out.println("🔹 Department-wise Bonus Report 🔹");
+        bonusReport.forEach((dept, bonuses) -> {
+            System.out.println("Department: " + dept);
+            bonuses.forEach(bd ->
+                    System.out.println("   " + bd.getEmployee().getName() + " → ₹" + bd.getBonus()));
+        });
+    }
+
+    private static List<BonusDistribution> distributeBonuses(List<Employee> employees) {
+        double totalSalary = employees.stream().mapToDouble(Employee::getBaseSalary).sum();
+        double bonusPool = totalSalary * 0.10;
+        int totalRatings = employees.stream().mapToInt(Employee::getRating).sum();
+
+        return employees.stream()
+                .map(emp -> {
+                    double share = (emp.getRating() / (double) totalRatings) * bonusPool;
+                    return new BonusDistribution(emp, share);
+                })
+                .collect(Collectors.toList());
+    }
+}

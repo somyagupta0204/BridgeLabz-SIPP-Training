@@ -1,0 +1,88 @@
+ques-1 Healthcare Diagnosis Engine
+
+import java.util.*;
+
+// Strategy Interface
+interface DiagnosisStrategy {
+    List<String> diagnose(List<String> symptoms);
+}
+
+// Rule-based Strategy
+class RuleBasedDiagnosis implements DiagnosisStrategy {
+    public List<String> diagnose(List<String> symptoms) {
+        List<String> diseases = new ArrayList<>();
+        if (symptoms.contains("fever") && symptoms.contains("cough") && symptoms.contains("fatigue"))
+            diseases.addAll(Arrays.asList("Flu", "COVID-19"));
+        return diseases;
+    }
+}
+
+// AI-based Strategy
+class AIBasedDiagnosis implements DiagnosisStrategy {
+    public List<String> diagnose(List<String> symptoms) {
+        List<String> diseases = new ArrayList<>();
+        if (symptoms.contains("headache") && symptoms.contains("dizziness") && symptoms.contains("nausea"))
+            diseases.addAll(Arrays.asList("Migraine", "Vertigo"));
+        return diseases;
+    }
+}
+
+// Probability-based Strategy (pseudo-code problem)
+class ProbabilityBasedDiagnosis implements DiagnosisStrategy {
+    public List<String> diagnose(List<String> symptoms) {
+        List<String> diseases = new ArrayList<>();
+        if (symptoms.contains("chest pain")) 
+            diseases.add("Probability: 70% Heart Disease");
+        if (symptoms.contains("shortness of breath")) 
+            diseases.add("Probability: 60% Asthma");
+        return diseases;
+    }
+}
+
+// New Algorithm: Genetic Pattern Diagnosis (future extension)
+class GeneticPatternDiagnosis implements DiagnosisStrategy {
+    public List<String> diagnose(List<String> symptoms) {
+        return Arrays.asList("Genetic Disorder Suspected");
+    }
+}
+
+// Context Class
+class DiagnosisContext {
+    private DiagnosisStrategy strategy;
+
+    public void setStrategy(DiagnosisStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void executeDiagnosis(List<String> symptoms) {
+        List<String> result = strategy.diagnose(symptoms);
+        System.out.println("Possible Diagnoses: " + result);
+    }
+}
+
+// Demo
+public class HealthcareDiagnosisEngine {
+    public static void main(String[] args) {
+        DiagnosisContext context = new DiagnosisContext();
+
+        List<String> patient1 = Arrays.asList("fever", "cough", "fatigue");
+        context.setStrategy(new RuleBasedDiagnosis());
+        System.out.println("General Medicine Patient:");
+        context.executeDiagnosis(patient1);
+
+        List<String> patient2 = Arrays.asList("headache", "dizziness", "nausea");
+        context.setStrategy(new AIBasedDiagnosis());
+        System.out.println("\nNeurology Patient:");
+        context.executeDiagnosis(patient2);
+
+        List<String> patient3 = Arrays.asList("chest pain", "shortness of breath");
+        context.setStrategy(new ProbabilityBasedDiagnosis());
+        System.out.println("\nCardiology Patient:");
+        context.executeDiagnosis(patient3);
+
+        List<String> patient4 = Arrays.asList("gene mutation", "family history");
+        context.setStrategy(new GeneticPatternDiagnosis());
+        System.out.println("\nGenetics Patient:");
+        context.executeDiagnosis(patient4);
+    }
+}

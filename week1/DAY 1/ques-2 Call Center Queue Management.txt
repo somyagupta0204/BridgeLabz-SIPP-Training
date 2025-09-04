@@ -1,0 +1,59 @@
+ques-2 Call Center Queue Management
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Customer {
+    String name;
+    boolean emergency;
+
+    Customer(String name, boolean emergency) {
+        this.name = name;
+        this.emergency = emergency;
+    }
+}
+
+class CallCenter {
+    Queue<Customer> normalQueue = new LinkedList<>();
+    Queue<Customer> emergencyQueue = new LinkedList<>();
+
+    void addCustomer(String name, boolean emergency) {
+        Customer c = new Customer(name, emergency);
+        if (emergency) {
+            emergencyQueue.add(c);
+        } else {
+            normalQueue.add(c);
+        }
+    }
+
+    void serveCustomer() {
+        if (!emergencyQueue.isEmpty()) {
+            Customer c = emergencyQueue.poll();
+            System.out.println("Serving EMERGENCY customer: " + c.name);
+        } else if (!normalQueue.isEmpty()) {
+            Customer c = normalQueue.poll();
+            System.out.println("Serving normal customer: " + c.name);
+        } else {
+            System.out.println("No customers in queue.");
+        }
+    }
+}
+
+public class CallCenterQueue {
+    public static void main(String[] args) {
+        CallCenter cc = new CallCenter();
+
+        cc.addCustomer("Alice", false);
+        cc.addCustomer("Bob", false);
+        cc.addCustomer("Charlie", true);
+        cc.addCustomer("David", false);
+        cc.addCustomer("Eva", true);
+
+        cc.serveCustomer();
+        cc.serveCustomer();
+        cc.serveCustomer();
+        cc.serveCustomer();
+        cc.serveCustomer();
+        cc.serveCustomer();
+    }
+}

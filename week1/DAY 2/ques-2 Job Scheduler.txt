@@ -1,0 +1,39 @@
+ques-2 Job Scheduler
+
+import java.util.*;
+
+class Job {
+    String name;
+    int deadline;
+    int processingTime;
+
+    Job(String name, int deadline, int processingTime) {
+        this.name = name;
+        this.deadline = deadline;
+        this.processingTime = processingTime;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (Deadline: " + deadline + ", Time: " + processingTime + ")";
+    }
+}
+
+public class JobScheduler {
+    public static void main(String[] args) {
+        PriorityQueue<Job> jobQueue = new PriorityQueue<>(
+            Comparator.comparingInt((Job j) -> j.deadline)
+                      .thenComparingInt(j -> j.processingTime)
+        );
+
+        jobQueue.add(new Job("Job1", 5, 3));
+        jobQueue.add(new Job("Job2", 2, 4));
+        jobQueue.add(new Job("Job3", 1, 2));
+        jobQueue.add(new Job("Job4", 3, 1));
+
+        while (!jobQueue.isEmpty()) {
+            Job job = jobQueue.poll();
+            System.out.println("Processing " + job);
+        }
+    }
+}

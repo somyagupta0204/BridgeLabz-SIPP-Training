@@ -1,0 +1,136 @@
+ques-1 Restaurant POS Billing System
+
+import java.util.*;
+
+// ------------------- Tax System -------------------
+interface TaxCalculator {
+    double calculateTax(double price);
+}
+
+class FoodTax implements TaxCalculator {
+    public double calculateTax(double price) {
+        return price * 0.05; // 5% GST
+    }
+}
+
+class BeverageTax implements TaxCalculator {
+    public double calculateTax(double price) {
+        return price * 0.12; // 12% GST
+    }
+}
+
+class ImportedTax implements TaxCalculator {
+    public double calculateTax(double price) {
+        return (price * 0.05) + (price * 0.10); // 5% GST + 10% Customs duty
+    }
+}
+
+// Example future extension
+class LuxuryTax implements TaxCalculator {
+    public double calculateTax(double price) {
+        return price * 0.20; // 20% luxury surcharge
+    }
+}
+
+// ------------------- Discount System -------------------
+interface DiscountPolicy {
+    double applyDiscount(double totalAmount);
+}
+
+class NoDiscount implements DiscountPolicy {
+    public double applyDiscount(double totalAmount) {
+        return totalAmount; // no discount
+    }
+}
+
+class FlatDiscount implements DiscountPolicy {
+    public double applyDiscount(double totalAmount) {
+        return totalAmount - 100; // flat ₹100 off
+    }
+}
+
+class PercentageDiscount implements DiscountPolicy {
+    public double applyDiscount(double totalAmount) {
+        return totalAmount * 0.90; // 10% off
+    }
+}
+
+// New Discount added later
+class BuyOneGetOne implements DiscountPolicy {
+    public double applyDiscount(double totalAmount) {
+        return totalAmount / 2; // Simplified BOGO = 50% off
+    }
+}
+
+// ------------------- Menu Item -------------------
+class Item {
+    private String name;
+    private double price;
+    private TaxCalculator taxCalculator;
+
+    public Item(String name, double price, TaxCalculator taxCalculator) {
+        this.name = name;
+        this.price = price;
+        this.taxCalculator = taxCalculator;
+    }
+
+    public double getFinalPrice() {
+        return price + taxCalculator.calculateTax(price);
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+// ------------------- Billing Engine -------------------
+class Bill {
+    private List<Item> items = new ArrayList<>();
+    private DiscountPolicy discountPolicy;
+
+    public Bill(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public void generateBill() {
+        double total = 0;
+        System.out.println("----- Spice Villa Bill -----");
+        for (Item item : items) {
+            double itemPrice = item.getFinalPrice();
+            total += itemPrice;
+            System.out.println(item.getName() + " : ₹" + String.format("%.2f", itemPrice));
+        }
+
+        System.out.println("Subtotal : ₹" + String.format("%.2f", total));
+        double finalAmount = discountPolicy.applyDiscount(total);
+        System.out.println("Final Payable (after discount): ₹" + String.format("%.2f", finalAmount));
+        System.out.println("----------------------------");
+    }
+}
+
+// ------------------- Demo -------------------
+public class RestaurantPOS {
+    public static void main(String[] args) {
+        // Scenario 1
+        Bill bill1 = new Bill(new PercentageDiscount()); // 10% off
+        bill1.addItem(new Item("Paneer Tikka", 250, new FoodTax()));
+        bill1.addItem(new Item("Coke", 100, new BeverageTax()));
+        bill1.addItem(new Item("Imported Cheese", 500, new ImportedTax()));
+        bill1.generateBill();
+
+        // Scenario 2 (new discount Buy1Get1 added without touching main billing logic)
+        Bill bill2 = new Bill(new BuyOneGetOne()); 
+        bill2.addItem(new Item("Pizza", 400, new FoodTax()));
+        bill2.addItem(new Item("Burger", 200, new FoodTax()));
+        bill2.generateBill();
+
+        // Scenario 3 (LuxuryTax introduced seamlessly)
+        Bill bill3 = new Bill(new FlatDiscount()); // Flat ₹100 off
+        bill3.addItem(new Item("Premium Wine", 2000, new LuxuryTax()));
+        bill3.generateBill();
+    }
+}

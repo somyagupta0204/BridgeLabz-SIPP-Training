@@ -1,0 +1,50 @@
+ques-3 Smart Grid Energy Usage Tracker
+
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Reading {
+    private final int consumptionKW;
+    public Reading(int consumptionKW) { this.consumptionKW = consumptionKW; }
+    public int getConsumptionKW() { return consumptionKW; }
+}
+
+public class SmartGridEnergyTracker {
+    public static void main(String[] args) {
+        Map<String, Map<LocalDate, List<Reading>>> energyData = new HashMap<>();
+
+        addReading(energyData, "Zone-A", LocalDate.of(2025, 8, 1),
+                Arrays.asList(new Reading(120), new Reading(90), new Reading(200), new Reading(150)));
+
+        addReading(energyData, "Zone-B", LocalDate.of(2025, 8, 1),
+                Arrays.asList(new Reading(300), new Reading(350), new Reading(250)));
+
+        addReading(energyData, "Zone-A", LocalDate.of(2025, 8, 2),
+                Arrays.asList(new Reading(400), new Reading(500), new Reading(450)));
+
+        generatePeakLoadReport(energyData);
+    }
+
+    private static void addReading(Map<String, Map<LocalDate, List<Reading>>> energyData,
+                                   String zone, LocalDate day, List<Reading> readings) {
+        energyData
+                .computeIfAbsent(zone, z -> new HashMap<>())
+                .computeIfAbsent(day, d -> new ArrayList<>())
+                .addAll(readings);
+    }
+
+    private static void generatePeakLoadReport(Map<String, Map<LocalDate, List<Reading>>> energyData) {
+        System.out.println("🔹 Zone-wise Peak Load Report 🔹");
+        energyData.forEach((zone, dayMap) -> {
+            System.out.println("Zone: " + zone);
+            dayMap.forEach((day, readings) -> {
+                int peak = readings.stream()
+                        .mapToInt(Reading::getConsumptionKW)
+                        .max()
+                        .orElse(0);
+                System.out.println("   Day: " + day + " → Peak Load = " + peak + " kW");
+            });
+        });
+    }
+}

@@ -1,0 +1,48 @@
+ques-3 Online Store Cart System
+
+import java.util.*;
+
+class Item {
+    String name;
+    double price;
+    int quantity;
+
+    Item(String name, double price, int quantity) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    double getTotalPrice() {
+        return price * quantity;
+    }
+}
+
+class ShoppingCart {
+    List<Item> cart = new ArrayList<>();
+
+    void addItem(Item item) {
+        cart.add(item);
+    }
+
+    <T extends Item> double calculateTotal(List<T> items) {
+        double total = 0;
+        for (T item : items) {
+            total += item.getTotalPrice();
+        }
+        return total;
+    }
+}
+
+public class ShoppingCartDemo {
+    public static void main(String[] args) {
+        ShoppingCart cart = new ShoppingCart();
+
+        cart.addItem(new Item("Apple", 10.0, 5));
+        cart.addItem(new Item("Milk", 40.0, 2));
+        cart.addItem(new Item("Bread", 25.0, 1));
+
+        double total = cart.calculateTotal(cart.cart);
+        System.out.println("Total Price: " + total);
+    }
+}

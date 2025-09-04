@@ -1,0 +1,110 @@
+ques-2 Autocomplete Search Suggestions – Trie
+Implementation
+
+import java.util.*;
+
+class TrieNode {
+    Map<Character, TrieNode> children;
+    boolean isEndOfWord;
+    int popularity; // maintain popularity score
+    String word;
+
+    public TrieNode() {
+        children = new HashMap<>();
+        isEndOfWord = false;
+        popularity = 0;
+        word = null;
+    }
+}
+
+class Trie {
+    private TrieNode root;
+
+    public Trie() {
+        root = new TrieNode();
+    }
+
+    // Insert a keyword
+    public void insert(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            current = current.children.computeIfAbsent(ch, c -> new TrieNode());
+        }
+        current.isEndOfWord = true;
+        current.word = word;
+        current.popularity++; // Each insertion means it's used once
+    }
+
+    // Increase popularity when user searches/orders
+    public void increasePopularity(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            if (!current.children.containsKey(ch)) return; // Not found
+            current = current.children.get(ch);
+        }
+        if (current.isEndOfWord) {
+            current.popularity++;
+        }
+    }
+
+    // Get top N matches for a prefix
+    public List<String> search(String prefix, int topN) {
+        TrieNode current = root;
+
+        // Traverse till end of prefix
+        for (char ch : prefix.toCharArray()) {
+            if (!current.children.containsKey(ch)) {
+                return new ArrayList<>(); // No matches
+            }
+            current = current.children.get(ch);
+        }
+
+        // Collect all words starting from this prefix node
+        List<TrieNode> allWords = new ArrayList<>();
+        collectWords(current, allWords);
+
+        // Sort by popularity (desc)
+        allWords.sort((a, b) -> b.popularity - a.popularity);
+
+        // Return top N words
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < Math.min(topN, allWords.size()); i++) {
+            result.add(allWords.get(i).word);
+        }
+        return result;
+    }
+
+    private void collectWords(TrieNode node, List<TrieNode> list) {
+        if (node == null) return;
+        if (node.isEndOfWord) {
+            list.add(node);
+        }
+        for (TrieNode child : node.children.values()) {
+            collectWords(child, list);
+        }
+    }
+}
+
+public class FoodKartSearchBar {
+    public static void main(String[] args) {
+        Trie trie = new Trie();
+
+        // Step 1: Insert keywords
+        trie.insert("pizza hut");
+        trie.insert("pizza point");
+        trie.insert("pita bread");
+        trie.insert("pizzeria");
+
+        // Step 2: User types "pi"
+        System.out.println("Suggestions for 'pi': " + trie.search("pi", 3));
+
+        // Step 3: Popularity boost for "pita bread"
+        trie.increasePopularity("pita bread");
+        trie.increasePopularity("pita bread");
+        System.out.println("Suggestions after 'pita bread' orders: " + trie.search("pi", 3));
+
+        // Step 4: Adding new keyword
+        trie.insert("pineapple cafe");
+        System.out.println("Suggestions after adding 'pineapple cafe': " + trie.search("pi", 5));
+    }
+}

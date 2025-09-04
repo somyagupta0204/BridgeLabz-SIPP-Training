@@ -1,0 +1,61 @@
+ques-2 Distributed Load Balancer
+
+import java.util.*;
+
+class LoadBalancer {
+    private Queue<String> servers;
+
+    public LoadBalancer(List<String> initialServers) {
+        this.servers = new LinkedList<>(initialServers);
+    }
+
+    // Add new server dynamically
+    public void addServer(String serverName) {
+        servers.offer(serverName);
+        System.out.println("Server " + serverName + " added to the pool.");
+    }
+
+    // Remove server dynamically
+    public void removeServer(String serverName) {
+        if (servers.remove(serverName)) {
+            System.out.println("Server " + serverName + " removed from the pool.");
+        } else {
+            System.out.println("Server " + serverName + " not found.");
+        }
+    }
+
+    // Assign request in Round-Robin fashion
+    public String assignRequest(String request) {
+        if (servers.isEmpty()) {
+            return "No active servers available for " + request;
+        }
+
+        String currentServer = servers.poll();  // Get first server
+        servers.offer(currentServer);          // Put it back at end (round-robin)
+        return request + " → " + currentServer;
+    }
+}
+
+public class DistributedLoadBalancerSimulation {
+    public static void main(String[] args) {
+        // Step 1: Initialize servers
+        List<String> initialServers = Arrays.asList("S1", "S2", "S3");
+        LoadBalancer lb = new LoadBalancer(initialServers);
+
+        // Step 2: Process initial requests
+        System.out.println(lb.assignRequest("R1"));
+        System.out.println(lb.assignRequest("R2"));
+        System.out.println(lb.assignRequest("R3"));
+
+        // Step 3: Add new server dynamically
+        lb.addServer("S4");
+        System.out.println(lb.assignRequest("R4"));
+        System.out.println(lb.assignRequest("R5"));
+
+        // Step 4: Remove a failing server
+        lb.removeServer("S2");
+        System.out.println(lb.assignRequest("R6"));
+        System.out.println(lb.assignRequest("R7"));
+        System.out.println(lb.assignRequest("R8"));
+    }
+}

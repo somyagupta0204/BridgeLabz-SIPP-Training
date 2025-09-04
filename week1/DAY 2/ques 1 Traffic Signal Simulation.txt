@@ -1,0 +1,39 @@
+ques 1 Traffic Signal Simulation
+
+enum TrafficLight {
+    RED, YELLOW, GREEN
+}
+
+class TrafficSignal {
+    private TrafficLight currentLight = TrafficLight.RED;
+
+    void changeLight() {
+        switch (currentLight) {
+            case RED:
+                currentLight = TrafficLight.GREEN;
+                break;
+            case GREEN:
+                currentLight = TrafficLight.YELLOW;
+                break;
+            case YELLOW:
+                currentLight = TrafficLight.RED;
+                break;
+        }
+    }
+
+    void showLight() {
+        System.out.println("Current Light: " + currentLight);
+    }
+}
+
+public class TrafficSignalSimulation {
+    public static void main(String[] args) throws InterruptedException {
+        TrafficSignal signal = new TrafficSignal();
+
+        for (int i = 0; i < 6; i++) {
+            signal.showLight();
+            Thread.sleep(1000); 
+            signal.changeLight();
+        }
+    }
+}

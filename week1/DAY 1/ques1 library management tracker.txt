@@ -1,0 +1,39 @@
+ques1 library management tracker
+import java.time.LocalDate;
+import java.time.Period;
+
+class Member {
+    String name;
+    String id;
+    LocalDate membershipDate;
+
+    Member(String name, String id, LocalDate membershipDate) {
+        this.name = name;
+        this.id = id;
+        this.membershipDate = membershipDate;
+    }
+
+    boolean isMembershipValid() {
+        LocalDate today = LocalDate.now();
+        Period period = Period.between(membershipDate, today);
+        return period.getYears() < 1; 
+    }
+
+    void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("ID: " + id);
+        System.out.println("Membership Date: " + membershipDate);
+        System.out.println("Valid: " + (isMembershipValid() ? "Yes" : "No"));
+    }
+}
+
+public class LibraryMembershipTracker {
+    public static void main(String[] args) {
+        Member m1 = new Member("Shruti", "M101", LocalDate.of(2024, 9, 1));
+        Member m2 = new Member("Rahul", "M102", LocalDate.of(2023, 5, 15));
+
+        m1.displayInfo();
+        System.out.println();
+        m2.displayInfo();
+    }
+}

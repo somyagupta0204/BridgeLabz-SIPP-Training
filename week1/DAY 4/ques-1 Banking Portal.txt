@@ -1,0 +1,69 @@
+ques-1 Banking Portal
+
+class Account {
+    String accNumber;
+    double balance;
+
+    Account(String accNumber, double balance) {
+        this.accNumber = accNumber;
+        this.balance = balance;
+    }
+
+    void withdraw(double amount) {
+        if (balance >= amount) {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount + " | Remaining: " + balance);
+        } else {
+            System.out.println("Insufficient Balance!");
+        }
+    }
+}
+
+class SavingAccount extends Account {
+    double minBalance = 1000;
+
+    SavingAccount(String accNumber, double balance) {
+        super(accNumber, balance);
+    }
+
+    @Override
+    void withdraw(double amount) {
+        if (balance - amount >= minBalance) {
+            balance -= amount;
+            System.out.println("Saving Withdrawn: " + amount + " | Remaining: " + balance);
+        } else {
+            System.out.println("Cannot withdraw! Minimum balance of " + minBalance + " required.");
+        }
+    }
+}
+
+class CurrentAccount extends Account {
+    double overdraftLimit = 5000;
+
+    CurrentAccount(String accNumber, double balance) {
+        super(accNumber, balance);
+    }
+
+    @Override
+    void withdraw(double amount) {
+        if (balance + overdraftLimit >= amount) {
+            balance -= amount;
+            System.out.println("Current Withdrawn: " + amount + " | Remaining: " + balance);
+        } else {
+            System.out.println("Overdraft limit exceeded!");
+        }
+    }
+}
+
+public class BankingPortal {
+    public static void main(String[] args) {
+        Account sAcc = new SavingAccount("S123", 5000);
+        Account cAcc = new CurrentAccount("C123", 2000);
+
+        sAcc.withdraw(3500);
+        sAcc.withdraw(2000);
+
+        cAcc.withdraw(6000);
+        cAcc.withdraw(8000);
+    }
+}

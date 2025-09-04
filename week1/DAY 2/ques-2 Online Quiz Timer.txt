@@ -1,0 +1,37 @@
+ques-2 Online Quiz Timer
+
+class QuizTimer {
+    int[] timeSlots;
+    int currentIndex = 0;
+
+    QuizTimer(int[] timeSlots) {
+        this.timeSlots = timeSlots;
+    }
+
+    void startQuiz() throws InterruptedException {
+        for (int i = 0; i < timeSlots.length; i++) {
+            int time = timeSlots[currentIndex];
+            System.out.println("Question " + (i + 1) + " - Time allotted: " + time + " seconds");
+
+            for (int t = time; t > 0; t--) {
+                if (t == 3) {
+                    System.out.println("⚠️ Warning: Only 3 seconds left!");
+                }
+                System.out.println("Time left: " + t + "s");
+                Thread.sleep(500); 
+            }
+
+            System.out.println("⏰ Time up for Question " + (i + 1));
+            currentIndex = (currentIndex + 1) % timeSlots.length;
+            System.out.println();
+        }
+    }
+}
+
+public class OnlineQuizTimer {
+    public static void main(String[] args) throws InterruptedException {
+        int[] slots = {10, 8, 12}; 
+        QuizTimer quiz = new QuizTimer(slots);
+        quiz.startQuiz();
+    }
+}

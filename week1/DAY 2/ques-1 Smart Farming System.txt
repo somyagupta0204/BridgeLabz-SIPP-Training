@@ -1,0 +1,53 @@
+ques-1 Smart Farming System
+
+abstract class Crop {
+    String name;
+
+    Crop(String name) {
+        this.name = name;
+    }
+
+    abstract void waterRequirement();
+    abstract void harvest();
+}
+
+class Rice extends Crop {
+    Rice() {
+        super("Rice");
+    }
+
+    void waterRequirement() {
+        System.out.println(name + " needs high water supply (flooded fields).");
+    }
+
+    void harvest() {
+        System.out.println(name + " is harvested in 4 months using sickle or machines.");
+    }
+}
+
+class Wheat extends Crop {
+    Wheat() {
+        super("Wheat");
+    }
+
+    void waterRequirement() {
+        System.out.println(name + " needs moderate water supply (irrigated fields).");
+    }
+
+    void harvest() {
+        System.out.println(name + " is harvested in 5 months using combine harvesters.");
+    }
+}
+
+public class SmartFarmingSystem {
+    public static void main(String[] args) {
+        Crop rice = new Rice();
+        Crop wheat = new Wheat();
+
+        rice.waterRequirement();
+        rice.harvest();
+
+        wheat.waterRequirement();
+        wheat.harvest();
+    }
+}

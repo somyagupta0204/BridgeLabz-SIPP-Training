@@ -1,0 +1,71 @@
+ques-2 Flight Price Analyzer
+
+import java.util.*;
+
+class Flight {
+    String name;
+    int price;
+    int duration; // in minutes
+
+    Flight(String name, int price, int duration) {
+        this.name = name;
+        this.price = price;
+        this.duration = duration;
+    }
+
+    public String toString() {
+        return name + " | Price: " + price + " | Duration: " + duration + " mins";
+    }
+}
+
+class FlightComparator implements Comparator<Flight> {
+    @Override
+    public int compare(Flight f1, Flight f2) {
+        if (f1.price != f2.price)
+            return Integer.compare(f1.price, f2.price); // sort by price
+        return Integer.compare(f1.duration, f2.duration); // tie → by duration
+    }
+}
+
+public class FlightPriceAnalyzer {
+
+    static void mergeSort(List<Flight> flights, Comparator<Flight> comp) {
+        if (flights.size() <= 1) return;
+
+        int mid = flights.size() / 2;
+        List<Flight> left = new ArrayList<>(flights.subList(0, mid));
+        List<Flight> right = new ArrayList<>(flights.subList(mid, flights.size()));
+
+        mergeSort(left, comp);
+        mergeSort(right, comp);
+
+        merge(flights, left, right, comp);
+    }
+
+    static void merge(List<Flight> flights, List<Flight> left, List<Flight> right, Comparator<Flight> comp) {
+        int i = 0, j = 0, k = 0;
+
+        while (i < left.size() && j < right.size()) {
+            if (comp.compare(left.get(i), right.get(j)) <= 0) {
+                flights.set(k++, left.get(i++));
+            } else {
+                flights.set(k++, right.get(j++));
+            }
+        }
+        while (i < left.size()) flights.set(k++, left.get(i++));
+        while (j < right.size()) flights.set(k++, right.get(j++));
+    }
+
+    public static void main(String[] args) {
+        List<Flight> flights = new ArrayList<>();
+        flights.add(new Flight("Indigo", 4500, 120));
+        flights.add(new Flight("Air India", 6000, 150));
+        flights.add(new Flight("SpiceJet", 4500, 100));
+        flights.add(new Flight("Vistara", 5500, 180));
+
+        mergeSort(flights, new FlightComparator());
+
+        System.out.println("Sorted Flights:");
+        flights.forEach(System.out::println);
+    }
+}

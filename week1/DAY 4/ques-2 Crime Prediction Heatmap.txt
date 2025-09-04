@@ -1,0 +1,60 @@
+ques-2 Crime Prediction Heatmap
+
+import java.util.*;
+
+class Zone {
+    String name;
+    int crimeRate; // 0-100
+
+    Zone(String name, int crimeRate) {
+        this.name = name;
+        this.crimeRate = crimeRate;
+    }
+
+    public String toString() {
+        return name + " (CrimeRate: " + crimeRate + ")";
+    }
+}
+
+public class CrimePredictionHeatmap {
+    Map<Zone, List<Zone>> graph = new HashMap<>();
+
+    void addConnection(Zone a, Zone b) {
+        graph.putIfAbsent(a, new ArrayList<>());
+        graph.putIfAbsent(b, new ArrayList<>());
+        graph.get(a).add(b);
+        graph.get(b).add(a);
+    }
+
+    void dfs(Zone zone, Set<Zone> visited) {
+        if (visited.contains(zone)) return;
+        visited.add(zone);
+
+        if (zone.crimeRate > 70) {
+            System.out.println(⚠️ High Risk Zone: " + zone);
+        }
+
+        for (Zone neighbor : graph.getOrDefault(zone, new ArrayList<>())) {
+            dfs(neighbor, visited);
+        }
+    }
+
+    public static void main(String[] args) {
+        CrimePredictionHeatmap city = new CrimePredictionHeatmap();
+
+        Zone z1 = new Zone("Zone A", 85);
+        Zone z2 = new Zone("Zone B", 40);
+        Zone z3 = new Zone("Zone C", 75);
+        Zone z4 = new Zone("Zone D", 20);
+        Zone z5 = new Zone("Zone E", 90);
+
+        city.addConnection(z1, z2);
+        city.addConnection(z2, z3);
+        city.addConnection(z3, z4);
+        city.addConnection(z4, z5);
+
+        System.out.println("Crime Prediction Heatmap:");
+        city.dfs(z1, new HashSet<>());
+    }
+}
+

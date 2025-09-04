@@ -1,0 +1,38 @@
+ques-3 Library Book Filter 
+
+import java.util.*;
+import java.util.stream.*;
+
+class Book {
+    String title;
+    int year;
+    double rating;
+
+    Book(String title, int year, double rating) {
+        this.title = title;
+        this.year = year;
+        this.rating = rating;
+    }
+
+    public String toString() {
+        return title + " (" + year + ") - Rating: " + rating;
+    }
+}
+
+public class LibraryBookFilter {
+    public static void main(String[] args) {
+        List<Book> books = Arrays.asList(
+            new Book("Java Basics", 2010, 4.2),
+            new Book("Advanced Java", 2018, 4.7),
+            new Book("Spring Framework", 2020, 4.8),
+            new Book("Data Structures", 2014, 4.6),
+            new Book("Microservices", 2021, 4.9)
+        );
+
+        List<Book> filtered = books.stream()
+                .filter(b -> b.year > 2015 && b.rating > 4.5)
+                .collect(Collectors.toList());
+
+        filtered.forEach(System.out::println);
+    }
+}

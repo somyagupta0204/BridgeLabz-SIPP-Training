@@ -1,0 +1,83 @@
+ques-1 Vehicle Rental System
+
+interface Rentable {
+    void rent();
+}
+
+abstract class Vehicle implements Rentable {
+    String model;
+    double pricePerDay;
+
+    Vehicle(String model, double pricePerDay) {
+        this.model = model;
+        this.pricePerDay = pricePerDay;
+    }
+
+    abstract void showDetails();
+
+    @Override
+    public void rent() {
+        System.out.println(model + " rented at " + pricePerDay + " per day.");
+    }
+}
+
+class Car extends Vehicle {
+    Car(String model, double pricePerDay) {
+        super(model, pricePerDay);
+    }
+
+    @Override
+    void showDetails() {
+        System.out.println("Car: " + model + " | Price/Day: " + pricePerDay);
+    }
+}
+
+class Bike extends Vehicle {
+    Bike(String model, double pricePerDay) {
+        super(model, pricePerDay);
+    }
+
+    @Override
+    void showDetails() {
+        System.out.println("Bike: " + model + " | Price/Day: " + pricePerDay);
+    }
+}
+
+class Truck extends Vehicle {
+    Truck(String model, double pricePerDay) {
+        super(model, pricePerDay);
+    }
+
+    @Override
+    void showDetails() {
+        System.out.println("Truck: " + model + " | Price/Day: " + pricePerDay);
+    }
+}
+
+class VehicleFactory {
+    static Vehicle getVehicle(String type, String model, double price) {
+        switch (type.toLowerCase()) {
+            case "car": return new Car(model, price);
+            case "bike": return new Bike(model, price);
+            case "truck": return new Truck(model, price);
+            default: throw new IllegalArgumentException("Unknown vehicle type");
+        }
+    }
+}
+
+public class VehicleRentalSystem {
+    public static void main(String[] args) {
+        Vehicle v1 = VehicleFactory.getVehicle("car", "Honda City", 1500);
+        Vehicle v2 = VehicleFactory.getVehicle("bike", "Royal Enfield", 700);
+        Vehicle v3 = VehicleFactory.getVehicle("truck", "Tata Ace", 2500);
+
+        v1.showDetails();
+        v1.rent();
+
+        v2.showDetails();
+        v2.rent();
+
+        v3.showDetails();
+        v3.rent();
+    }
+}

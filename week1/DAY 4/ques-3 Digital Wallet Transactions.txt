@@ -1,0 +1,55 @@
+ques-3 Digital Wallet Transactions Report
+
+import java.util.*;
+import java.util.stream.*;
+
+class Transaction {
+    String merchant;
+    String month;
+    double amount;
+
+    Transaction(String merchant, String month, double amount) {
+        this.merchant = merchant;
+        this.month = month;
+        this.amount = amount;
+    }
+
+    public String getMerchant() { return merchant; }
+    public String getMonth() { return month; }
+    public double getAmount() { return amount; }
+
+    public String toString() {
+        return merchant + " | " + month + " | " + amount;
+    }
+}
+
+public class WalletReport {
+    public static void main(String[] args) {
+        List<Transaction> transactions = Arrays.asList(
+            new Transaction("Amazon", "Jan", 1200),
+            new Transaction("Flipkart", "Jan", 800),
+            new Transaction("Amazon", "Feb", 1500),
+            new Transaction("Swiggy", "Jan", 600),
+            new Transaction("Amazon", "Jan", 700),
+            new Transaction("Flipkart", "Feb", 900)
+        );
+
+        Map<String, Map<String, Double>> report =
+            transactions.stream().collect(
+                Collectors.groupingBy(
+                    Transaction::getMerchant,
+                    Collectors.groupingBy(
+                        Transaction::getMonth,
+                        Collectors.summingDouble(Transaction::getAmount)
+                    )
+                )
+            );
+
+        report.forEach((merchant, monthData) -> {
+            System.out.println("Merchant: " + merchant);
+            monthData.forEach((month, total) ->
+                System.out.println("  " + month + " → " + total));
+            System.out.println();
+        });
+    }
+}

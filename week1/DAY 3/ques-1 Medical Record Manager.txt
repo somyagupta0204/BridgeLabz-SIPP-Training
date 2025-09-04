@@ -1,0 +1,67 @@
+ques-1 Medical Record Manager
+
+interface Searchable {
+    boolean search(String keyword);
+}
+
+interface Printable {
+    void print();
+}
+
+class LabReport implements Searchable, Printable {
+    String patientName;
+    String testType;
+    String result;
+
+    LabReport(String patientName, String testType, String result) {
+        this.patientName = patientName;
+        this.testType = testType;
+        this.result = result;
+    }
+
+    public boolean search(String keyword) {
+        return patientName.contains(keyword) || testType.contains(keyword);
+    }
+
+    public void print() {
+        System.out.println("Lab Report: " + patientName + " | Test: " + testType + " | Result: " + result);
+    }
+}
+
+class Prescription implements Searchable, Printable {
+    String patientName;
+    String medicine;
+    String dosage;
+
+    Prescription(String patientName, String medicine, String dosage) {
+        this.patientName = patientName;
+        this.medicine = medicine;
+        this.dosage = dosage;
+    }
+
+    public boolean search(String keyword) {
+        return patientName.contains(keyword) || medicine.contains(keyword);
+    }
+
+    public void print() {
+        System.out.println("Prescription: " + patientName + " | Medicine: " + medicine + " | Dosage: " + dosage);
+    }
+}
+
+public class MedicalRecordManager {
+    public static void main(String[] args) {
+        Searchable[] records = {
+            new LabReport("Amit", "Blood Test", "Normal"),
+            new Prescription("Amit", "Paracetamol", "500mg"),
+            new LabReport("Neha", "X-Ray", "Fracture Detected"),
+            new Prescription("Neha", "Painkiller", "2 times a day")
+        };
+
+        System.out.println("Search results for 'Neha':");
+        for (Searchable record : records) {
+            if (record.search("Neha") && record instanceof Printable) {
+                ((Printable) record).print();
+            }
+        }
+    }
+}

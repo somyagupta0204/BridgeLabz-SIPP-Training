@@ -1,0 +1,48 @@
+ques-3 Hospital Department Mapper
+
+import java.util.*;
+import java.util.stream.*;
+
+class Doctor {
+    String name;
+    String specialization;
+
+    Doctor(String name, String specialization) {
+        this.name = name;
+        this.specialization = specialization;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + specialization + ")";
+    }
+}
+
+public class HospitalDepartmentMapper {
+    public static void main(String[] args) {
+        Map<String, List<Doctor>> departmentMap = new HashMap<>();
+
+        departmentMap.put("Cardiology", Arrays.asList(
+                new Doctor("Dr. Sharma", "Heart Specialist"),
+                new Doctor("Dr. Gupta", "Heart Surgeon")
+        ));
+
+        departmentMap.put("Neurology", Arrays.asList(
+                new Doctor("Dr. Mehta", "Brain Specialist"),
+                new Doctor("Dr. Iyer", "Neuro Surgeon")
+        ));
+
+        departmentMap.put("Orthopedics", Arrays.asList(
+                new Doctor("Dr. Reddy", "Bone Specialist"),
+                new Doctor("Dr. Singh", "Spine Specialist")
+        ));
+
+        List<Doctor> heartDoctors = departmentMap.values().stream()
+                .flatMap(List::stream)
+                .filter(d -> d.specialization.contains("Heart"))
+                .collect(Collectors.toList());
+
+        System.out.println("Doctors with Heart specialization:");
+        heartDoctors.forEach(System.out::println);
+    }
+}

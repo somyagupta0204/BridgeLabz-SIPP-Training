@@ -1,0 +1,45 @@
+ques-3 Payment Processor
+
+class UPI {
+    String upiId;
+    UPI(String upiId) { this.upiId = upiId; }
+    public String toString() { return "UPI ID: " + upiId; }
+}
+
+class Card {
+    String cardNumber;
+    Card(String cardNumber) { this.cardNumber = cardNumber; }
+    public String toString() { return "Card No: " + cardNumber; }
+}
+
+class NetBanking {
+    String bankName;
+    NetBanking(String bankName) { this.bankName = bankName; }
+    public String toString() { return "NetBanking: " + bankName; }
+}
+
+class Transaction<T> {
+    private T paymentMode;
+    private double amount;
+
+    Transaction(T paymentMode, double amount) {
+        this.paymentMode = paymentMode;
+        this.amount = amount;
+    }
+
+    void process() {
+        System.out.println("Processing " + paymentMode + " | Amount: " + amount);
+    }
+}
+
+public class GenericTransactionDemo {
+    public static void main(String[] args) {
+        Transaction<UPI> t1 = new Transaction<>(new UPI("user@upi"), 500);
+        Transaction<Card> t2 = new Transaction<>(new Card("1234-5678-9012-3456"), 1200);
+        Transaction<NetBanking> t3 = new Transaction<>(new NetBanking("HDFC Bank"), 2500);
+
+        t1.process();
+        t2.process();
+        t3.process();
+    }
+}

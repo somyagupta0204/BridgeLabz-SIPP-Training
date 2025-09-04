@@ -1,0 +1,43 @@
+ques-3 College Course Registration
+
+import java.util.*;
+
+class Course {
+    String name;
+    Course(String name) { this.name = name; }
+    public String toString() { return name; }
+}
+
+class Student {
+    String name;
+    Student(String name) { this.name = name; }
+    public String toString() { return name; }
+}
+
+public class CourseStudentMap {
+    public static void main(String[] args) {
+        Map<Course, List<Student>> courseMap = new HashMap<>();
+
+        Course c1 = new Course("Java");
+        Course c2 = new Course("Python");
+
+        Student s1 = new Student("Aman");
+        Student s2 = new Student("Shruti");
+        Student s3 = new Student("Rahul");
+        Student s4 = new Student("Neha");
+
+        courseMap.putIfAbsent(c1, new ArrayList<>());
+        courseMap.get(c1).add(s1);
+        courseMap.get(c1).add(s2);
+
+        courseMap.putIfAbsent(c2, new ArrayList<>());
+        courseMap.get(c2).add(s3);
+        courseMap.get(c2).add(s4);
+
+        for (Map.Entry<Course, List<Student>> entry : courseMap.entrySet()) {
+            System.out.println("Course: " + entry.getKey());
+            System.out.println("Students: " + entry.getValue());
+            System.out.println();
+        }
+    }
+}

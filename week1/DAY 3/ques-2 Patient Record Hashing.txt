@@ -1,0 +1,48 @@
+ques-2 Patient Record Hashing
+
+import java.util.*;
+
+class Patient {
+    String id;
+    String name;
+    int age;
+    String disease;
+
+    Patient(String id, String name, int age, String disease) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.disease = disease;
+    }
+
+    void display() {
+        System.out.println("ID: " + id + ", Name: " + name + ", Age: " + age + ", Disease: " + disease);
+    }
+}
+
+public class PatientRecordHashing {
+    public static void main(String[] args) {
+        HashMap<String, Patient> records = new HashMap<>();
+
+        records.put("P101", new Patient("P101", "Amit", 30, "Fever"));
+        records.put("P102", new Patient("P102", "Neha", 25, "Cough"));
+        records.put("P103", new Patient("P103", "Raj", 40, "Diabetes"));
+
+        System.out.println("Retrieve P102:");
+        Patient p = records.get("P102");
+        if (p != null) p.display();
+
+        System.out.println("\nUpdate P103:");
+        Patient updated = new Patient("P103", "Raj", 41, "Diabetes Controlled");
+        records.put("P103", updated);
+        records.get("P103").display();
+
+        System.out.println("\nDelete P101:");
+        records.remove("P101");
+
+        System.out.println("\nAll Remaining Records:");
+        for (Patient patient : records.values()) {
+            patient.display();
+        }
+    }
+}
