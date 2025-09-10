@@ -1,0 +1,13 @@
+3. Bus Route Navigator (DSA - Easy, LinkedList
+class BusStop {
+    String name;
+    BusStop next;
+}
+
+class BusRoute {
+    BusStop head;
+
+    void addStop(String stopName) { /* insert node */ }
+    void removeStop(String stopName) { /* delete node */ }
+    boolean searchStop(String stopName) { /* search node */ }
+}

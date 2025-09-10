@@ -1,0 +1,6 @@
+5. Simple Word Counter (Collections - Easy)
+String text = "Sports bring people together. Sports inspire teamwork.";
+String[] words = text.toLowerCase().replaceAll("[^a-z ]", "").split(" ");
+
+Map<String, Long> freq = Arrays.stream(words)
+    .collect(Collectors.groupingBy(w -> w, Collectors.counting()));

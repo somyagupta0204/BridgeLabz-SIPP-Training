@@ -1,0 +1,36 @@
+2. Parking Lot Ticketing System (Java OOPs - Moderate)
+abstract class Vehicle {
+    String vehicleNumber;
+    LocalTime entryTime;
+
+    Vehicle(String vNo, LocalTime entry) {
+        vehicleNumber = vNo;
+        entryTime = entry;
+    }
+
+    abstract int calculateFee(LocalTime exitTime);
+}
+
+class Car extends Vehicle {
+    @Override
+    int calculateFee(LocalTime exitTime) {
+        long hours = Duration.between(entryTime, exitTime).toHours();
+        return 50 + (int)(Math.max(0, hours - 1) * 30);
+    }
+}
+
+class Bike extends Vehicle {
+    @Override
+    int calculateFee(LocalTime exitTime) {
+        long hours = Duration.between(entryTime, exitTime).toHours();
+        return 20 + (int)(Math.max(0, hours - 1) * 10);
+    }
+}
+
+class Truck extends Vehicle {
+    @Override
+    int calculateFee(LocalTime exitTime) {
+        long hours = Duration.between(entryTime, exitTime).toHours();
+        return 100 + (int)(Math.max(0, hours - 1) * 50);
+    }
+}

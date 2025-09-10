@@ -1,0 +1,35 @@
+1. Online Exam Portal (Java OOPs - Easy)
+class User {
+    String username;
+    String password;
+
+    boolean login() {
+        // generic check
+        return username != null && password != null;
+    }
+}
+
+class Student extends User {
+    boolean enrolled;
+
+    @Override
+    boolean login() {
+        return super.login() && enrolled;  // student must be enrolled
+    }
+}
+
+class Admin extends User {
+    boolean hasPrivileges;
+
+    @Override
+    boolean login() {
+        return super.login() && hasPrivileges; // must be staff/admin
+    }
+}
+
+// Example
+Student s = new Student("john123", "pass123", true);
+if(s.login()) showExams();
+
+Admin a = new Admin("admin1", "adminpass", true);
+if(a.login()) showAdminTools();

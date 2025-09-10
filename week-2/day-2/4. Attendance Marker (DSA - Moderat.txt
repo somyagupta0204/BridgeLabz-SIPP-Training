@@ -1,0 +1,13 @@
+4. Attendance Marker (DSA - Moderate, 2D Arrays)
+int[][] attendance = new int[30][30]; // 30 students x 30 days
+
+// mark attendance
+attendance[studentId][day] = 1;  // Present
+
+// daily summary
+int count = 0;
+for(int i=0; i<30; i++) if(attendance[i][day]==1) count++;
+
+// monthly summary for one student
+int total = 0;
+for(int d=0; d<30; d++) if(attendance[studentId][d]==1) total++;

@@ -1,0 +1,14 @@
+6. Online Survey Report Generator (Collections - Moderate)
+class SurveyResponse {
+    String restaurantName;
+    int rating;
+}
+
+List<SurveyResponse> responses = ...
+
+Map<String, Double> avgRatings =
+    responses.stream()
+        .collect(Collectors.groupingBy(
+            SurveyResponse::getRestaurantName,
+            Collectors.averagingInt(SurveyResponse::getRating)
+        ));
