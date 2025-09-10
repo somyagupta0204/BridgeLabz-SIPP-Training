@@ -1,0 +1,37 @@
+ques-2 Bus Route Navigator
+
+import java.util.LinkedList;
+
+public class BusRouteNavigator {
+    public static void main(String[] args) {
+        LinkedList<String> route = new LinkedList<>();
+
+        // Initial route
+        route.add("Depot");
+        route.add("Main Street");
+        route.add("City Mall");
+        route.add("Hospital");
+        route.add("Airport");
+
+        System.out.println("Initial Route: " + route);
+
+        // Insert University Stop after City Mall
+        int index = route.indexOf("City Mall");
+        if (index != -1) {
+            route.add(index + 1, "University");
+        }
+        System.out.println("After adding University Stop: " + route);
+
+        // Remove Hospital due to road closure
+        route.remove("Hospital");
+        System.out.println("After removing Hospital: " + route);
+
+        // Search for Airport
+        String searchStop = "Airport";
+        if (route.contains(searchStop)) {
+            System.out.println(searchStop + " is in the route.");
+        } else {
+            System.out.println(searchStop + " is NOT in the route.");
+        }
+    }
+}

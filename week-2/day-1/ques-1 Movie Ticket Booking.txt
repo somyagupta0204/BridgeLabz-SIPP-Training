@@ -1,0 +1,94 @@
+ques-1 Movie Ticket Booking
+
+import java.util.*;
+
+class Ticket {
+    private String movieName;
+    private String seatNumber;
+    private double price;
+    private boolean booked;
+
+    public Ticket(String movieName, String seatNumber, double price) {
+        this.movieName = movieName;
+        this.seatNumber = seatNumber;
+        this.price = price;
+        this.booked = true;
+    }
+
+    public String getSeatNumber() { return seatNumber; }
+    public String getMovieName() { return movieName; }
+    public double getPrice() { return price; }
+    public boolean isBooked() { return booked; }
+
+    public void cancel() { booked = false; }
+}
+
+class Theatre {
+    private String name;
+    private Map<String, Double> movieSchedule; // movieName -> price
+    private Set<String> availableSeats;
+
+    public Theatre(String name, Map<String, Double> movieSchedule, List<String> seats) {
+        this.name = name;
+        this.movieSchedule = movieSchedule;
+        this.availableSeats = new HashSet<>(seats);
+    }
+
+    public Ticket bookTicket(String movieName, String seatNumber) {
+        if (!availableSeats.contains(seatNumber)) {
+            System.out.println("Seat " + seatNumber + " not available.");
+            return null;
+        }
+        if (!movieSchedule.containsKey(movieName)) {
+            System.out.println("Movie not available.");
+            return null;
+        }
+        availableSeats.remove(seatNumber);
+        Ticket ticket = new Ticket(movieName, seatNumber, movieSchedule.get(movieName));
+        System.out.println("Ticket booked: " + movieName + ", Seat: " + seatNumber);
+        return ticket;
+    }
+
+    public void cancelTicket(Ticket ticket) {
+        ticket.cancel();
+        availableSeats.add(ticket.getSeatNumber());
+        System.out.println("Ticket cancelled: " + ticket.getMovieName() + ", Seat: " + ticket.getSeatNumber());
+    }
+
+    public void showAvailableSeats() {
+        System.out.println("Available Seats: " + availableSeats);
+    }
+}
+
+class Customer {
+    private String name;
+
+    public Customer(String name) { this.name = name; }
+
+    public Ticket bookTicket(Theatre theatre, String movieName, String seatNumber) {
+        return theatre.bookTicket(movieName, seatNumber);
+    }
+
+    public void cancelTicket(Theatre theatre, Ticket ticket) {
+        theatre.cancelTicket(ticket);
+    }
+}
+
+public class MovieTicketBooking {
+    public static void main(String[] args) {
+        Map<String, Double> schedule = new HashMap<>();
+        schedule.put("Avengers: Endgame", 300.0);
+        schedule.put("Spider-Man: No Way Home", 250.0);
+
+        List<String> seats = Arrays.asList("A1","A2","A12","B1","B2");
+
+        Theatre theatre = new Theatre("PVR Cinema", schedule, seats);
+        Customer ravi = new Customer("Ravi");
+
+        Ticket t1 = ravi.bookTicket(theatre, "Avengers: Endgame", "A12");
+        theatre.showAvailableSeats();
+
+        ravi.cancelTicket(theatre, t1);
+        theatre.showAvailableSeats();
+    }
+}

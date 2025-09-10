@@ -1,0 +1,34 @@
+ques-3 Daily Tasks Organizer
+
+import java.util.*;
+
+public class DailyTasksOrganizer {
+    public static void main(String[] args) {
+        LinkedHashMap<Integer, String> tasks = new LinkedHashMap<>();
+        int taskIdCounter = 1;
+
+        // Morning entries
+        tasks.put(taskIdCounter++, "Check emails");
+        tasks.put(taskIdCounter++, "Prepare sales report");
+        tasks.put(taskIdCounter++, "Call client");
+
+        System.out.println("Tasks after morning entry:");
+        printTasks(tasks);
+
+        // Midday: Task 2 completed and removed
+        tasks.remove(2);
+
+        System.out.println("\nTasks after completing Task 2:");
+        printTasks(tasks);
+
+        // Add new task
+        tasks.put(taskIdCounter++, "Review campaign performance");
+
+        System.out.println("\nTasks after adding a new task:");
+        printTasks(tasks);
+    }
+
+    private static void printTasks(LinkedHashMap<Integer, String> tasks) {
+        tasks.forEach((id, desc) -> System.out.println(id + " → " + desc));
+    }
+}
